@@ -3,12 +3,23 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {Provider} from "react-redux";
+import {HashRouter} from "react-router-dom";
+import {store} from './app/store';
+import {getDomainUserThunk} from "./features/UsersSlice";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+store.dispatch(getDomainUserThunk())
+
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <React.StrictMode>
+        <Provider store={store}>
+            <HashRouter>
+                <App/>
+            </HashRouter>
+        </Provider>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

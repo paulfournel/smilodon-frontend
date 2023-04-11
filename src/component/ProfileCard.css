@@ -1,0 +1,49 @@
+.card {
+    border-radius: 10px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 30px;
+}
+
+.card-body {
+    padding: 1.25rem;
+    width: 100%;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.card-info-item {
+    text-align: center;
+}
+
+.card-info-item span {
+    font-size: 1.25rem;
+    font-weight: bold;
+    display: block;
+}
+
+.card-info-item small {
+    font-size: 0.875rem;
+    color: #555;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #555;
+}
+
+.card-body > .avatar {
+    width: 70px;
+    height: 70px;
+    position: relative;
+    top: -47px;
+    margin-bottom: -28px;
+}

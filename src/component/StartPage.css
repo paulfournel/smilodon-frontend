@@ -1,0 +1,80 @@
+.start-page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+}
+
+.start-page h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+
+.start-page p {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.login-form {
+    max-width: 600px;
+    width: 80%;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.login-form form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-form input {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1.2rem;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 5px;
+    font-size: 1.2rem;
+
+    border: none;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.fg-simodon {
+    width: 90%;
+}
+
+@media (max-width: 767px) {
+    .start-page h1 {
+        font-size: 2rem;
+    }
+
+    .start-page p {
+        font-size: 1.2rem;
+    }
+
+    .login-form {
+        max-width: 90%;
+        padding: 1.5rem;
+    }
+
+    .login-form input {
+        font-size: 1rem;
+    }
+
+    .login-form button {
+        font-size: 1rem;
+    }
+}
