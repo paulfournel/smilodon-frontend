@@ -1,0 +1,61 @@
+image: docker:latest
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay
+  SPRING_PROFILES_ACTIVE: gitlab-ci
+  DOCKER_REGISTRY: 264634606562.dkr.ecr.eu-central-1.amazonaws.com
+  APP_NAME: privatestrava-frontend
+
+stages:
+  - build
+  - package
+  - deploy
+
+build_react:
+  only:
+    refs:
+      - master
+  image: node:latest
+  stage: build
+  script:
+    - echo "Building deploy package"
+    - yarn install
+    - yarn build
+    - echo "Build successful"
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - build
+      - node_modules/
+
+docker-build:
+  stage: package
+  image:
+    name: amazon/aws-cli
+    entrypoint: [""]
+  services:
+    - docker:dind
+  before_script:
+    - amazon-linux-extras install docker
+    - aws --version
+    - docker --version
+  script:
+    - docker build -t $DOCKER_REGISTRY/$APP_NAME:$CI_PIPELINE_IID .
+    - aws ecr get-login-password | docker login --username AWS --password-stdin $DOCKER_REGISTRY
+    - docker push $DOCKER_REGISTRY/$APP_NAME:$CI_PIPELINE_IID
+
+deploy:
+  stage: deploy
+  only:
+    refs:
+      - master
+  image:
+    name: gregi/kubectl-deployer:latest
+    entrypoint: ['']
+  script:
+    - kubectl config get-contexts
+    - kubectl config use-context private-strava/frontend:k8s
+    - cat deployment.yaml | envsubst | tee deployment-tmp.yaml
+    - kubectl apply -f deployment-tmp.yaml
