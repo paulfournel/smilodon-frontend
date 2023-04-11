@@ -1,0 +1,3 @@
+gitops:
+  manifest_projects:
+  - id: "private-strava/frontend/k8s"
