@@ -4,6 +4,8 @@ import {useSelector} from "react-redux";
 
 export const PrivateRoute = () => {
     let user = useSelector((state) => state.user.domain);
+    console.log("private route")
+    console.log(user)
     // If authorized, return an outlet that will render child elements
     // If not, return element that will navigate to login page
     return user ? <Outlet /> : <Navigate to="/login" />;
