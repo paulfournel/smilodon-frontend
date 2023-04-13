@@ -1,11 +1,15 @@
 import React from "react";
-import {Button, Container, Form, FormControl, Image, InputGroup, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Container, Form, Image, InputGroup, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBell, faCog, faSearch, faSignOutAlt, faUser} from "@fortawesome/free-solid-svg-icons";
 import avatar from "../images/avatar.png";
 import "./Navbar.css";
+import {Link, useNavigate} from "react-router-dom";
 
 export function NavbarComponent() {
+
+    const navigate = useNavigate();
+
     return (
 
         <Navbar collapseOnSelect bg="light" expand="md" className="navbar" sticky="top">
@@ -22,13 +26,13 @@ export function NavbarComponent() {
                         </Nav.Link>
                         <Form className="d-none d-sm-block d-flex">
                             <InputGroup>
-                            <Form.Control
-                                type="search"
-                                placeholder="Search athletes"
-                                className="mr-2"
-                                aria-label="Search athletes"
-                            />
-                                <InputGroup.Text id="btnGroupAddon"><FontAwesomeIcon icon={faSearch} /></InputGroup.Text>
+                                <Form.Control
+                                    type="search"
+                                    placeholder="Search athletes"
+                                    className="mr-2"
+                                    aria-label="Search athletes"
+                                />
+                                <InputGroup.Text id="btnGroupAddon"><FontAwesomeIcon icon={faSearch}/></InputGroup.Text>
                             </InputGroup>
                         </Form>
                     </Nav>
@@ -42,7 +46,7 @@ export function NavbarComponent() {
                                 <FontAwesomeIcon icon={faUser} className="dropdown-icon"/>
                                 My Profile
                             </NavDropdown.Item>
-                            <NavDropdown.Item href="#">
+                            <NavDropdown.Item onClick={() => navigate("/settings")}>
                                 <FontAwesomeIcon icon={faCog} className="dropdown-icon"/>
                                 Settings
                             </NavDropdown.Item>
@@ -56,7 +60,7 @@ export function NavbarComponent() {
                             <FontAwesomeIcon icon={faUser} className="dropdown-icon"/>
                             My Profile
                         </Nav.Link>
-                        <Nav.Link href="#" className="d-md-none d-md-block nav-link">
+                        <Nav.Link onClick={() => navigate("/settings")} className="d-md-none d-md-block nav-link">
                             <FontAwesomeIcon icon={faCog} className="dropdown-icon"/>
                             Settings
                         </Nav.Link>

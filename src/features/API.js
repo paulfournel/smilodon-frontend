@@ -11,3 +11,11 @@ export var SERVER = () => {
 export const getDomainUser = async () => {
     return (await request(`${SERVER()}/api/users/me`, {method: 'GET'})).data
 }
+
+export const getActivities = async () => {
+    return (await request(`${SERVER()}/api/users/me/activities`, {method: 'GET'})).data
+}
+
+export const processActivities = async () => {
+    return (await request(`${SERVER()}/api/strava/sync`, {method: 'GET'})).data
+}
