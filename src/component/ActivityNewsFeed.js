@@ -1,12 +1,34 @@
-import React from "react";
+import React, {useState} from "react";
 import "./ActivityNewsFeed.css";
 import Card from "react-bootstrap/Card";
 import {Image} from "react-bootstrap";
 import {format, parseISO} from "date-fns";
 import avatar from "../images/avatar.png";
 import {formatDuration} from "../utils/timeUtils";
+import {faCommentDots} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {addComment} from "../features/API";
 
 export function ActivityNewsFeed(props) {
+
+    const [showCommentBox, setShowCommentBox] = useState(false);
+    const [commentText, setCommentText] = useState("");
+
+    const handleCommentInputChange = (event) => {
+        setCommentText(event.target.value);
+    };
+
+    const handleCommentSubmit = (event) => {
+        event.preventDefault();
+        console.log(`Comment submitted: ${commentText}`);
+        addComment(props.activity.stravaActivity.id, commentText);
+        setShowCommentBox(false);
+        setCommentText("");
+    };
+
+    const handleCommentIconClick = () => {
+        setShowCommentBox(!showCommentBox);
+    };
 
     return (
         <Card className="strava-card">
@@ -36,10 +58,36 @@ export function ActivityNewsFeed(props) {
                             <small>Time</small>
                         </div>
                     </div>
+                    <div className="map">
+                        <Image src={`/api/img/${props.activity.stravaActivity.id}.png`} fluid={true} alt="Map"/>
+                    </div>
+                    <div className="comment-icon" onClick={handleCommentIconClick}>
+                        <FontAwesomeIcon icon={faCommentDots} className="dropdown-icon"/>
+                    </div>
                 </div>
-                <div className="map">
-                    <Image src={`/api/img/${props.activity.stravaActivity.id}.png`} fluid={true} alt="Map"/>
+                {showCommentBox && (
+                    <form onSubmit={handleCommentSubmit}>
+                        <div className="form-group">
+                            <textarea
+                                className="form-control"
+                                placeholder="Add a comment"
+                                value={commentText}
+                                onChange={handleCommentInputChange}
+                            ></textarea>
+                        </div>
+                        <button type="submit" className="btn btn-primary">
+                            Submit
+                        </button>
+                    </form>
+                )}
+                <div className="comments">
+                    {props.activity.stravaActivity.comments.map((comment, index) => (
+                        <div key={index} className="comment">
+                            <strong>{comment.fromUser}:</strong> {comment.message}
+                        </div>
+                    ))}
                 </div>
+
             </Card.Body>
         </Card>
     );

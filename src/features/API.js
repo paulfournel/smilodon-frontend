@@ -19,3 +19,10 @@ export const getActivities = async () => {
 export const processActivities = async () => {
     return (await request(`${SERVER()}/api/strava/sync`, {method: 'GET'})).data
 }
+
+export const addComment = async (activityId, message) => {
+    return await request(
+        `${SERVER()}/api/activities/${activityId}/comments`,
+        { method: 'POST', body: JSON.stringify({ message: message }) }
+    );
+}
