@@ -26,3 +26,10 @@ export const addComment = async (activityId, message) => {
         { method: 'POST', body: JSON.stringify({ message: message }) }
     );
 }
+
+export const patchUser = async (userData) => {
+    return request(
+        `${SERVER()}/api/users/me`,
+        { method: 'PATCH', body: JSON.stringify(userData) }
+    );
+}

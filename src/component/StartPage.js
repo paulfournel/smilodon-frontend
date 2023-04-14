@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getDomainUserThunk} from "../features/UsersSlice";
 
 export function StartPage() {
+    const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [passwordCheck, setPasswordCheck] = useState("");
@@ -29,13 +30,16 @@ export function StartPage() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const formData = new FormData();
-        formData.append("username", username);
-        formData.append("password", password);
+
 
         if (!isLogin) {
+            const formData = new FormData();
+            formData.append("username", username);
+            formData.append("email", email);
+            formData.append("password", password);
+
             if (password === passwordCheck) {
-                await axios.post("/open-api/users", {email: username, password: password});
+                await axios.post("/open-api/users", {email: email, username: username, password: password});
             }
         }
 
@@ -44,6 +48,10 @@ export function StartPage() {
         };
 
         try {
+            const formData = new FormData();
+            formData.append("username", email);
+            formData.append("password", password);
+
             await axios.post("/process_login", formData, config);
             dispatch(getDomainUserThunk())
 
@@ -62,12 +70,12 @@ export function StartPage() {
                 <Tabs activeKey={isLogin ? "login" : "register"} onSelect={toggleTab}>
                     <Tab eventKey="login" title="Login">
                         <Form onSubmit={handleSubmit}>
-                            <Form.Group controlId="username" className={"fg-simodon"}>
+                            <Form.Group controlId="email" className={"fg-simodon"}>
                                 <Form.Label>Email address</Form.Label>
                                 <Form.Control
                                     type="email"
-                                    value={username}
-                                    onChange={(event) => setUsername(event.target.value)}
+                                    value={email}
+                                    onChange={(event) => setEmail(event.target.value)}
                                     required
                                 />
                             </Form.Group>
@@ -89,10 +97,19 @@ export function StartPage() {
                     </Tab>
                     <Tab eventKey="register" title="Register">
                         <Form onSubmit={handleSubmit}>
-                            <Form.Group controlId="username" className={"fg-simodon"}>
+                            <Form.Group controlId="email" className={"fg-simodon"}>
                                 <Form.Label>Email address</Form.Label>
                                 <Form.Control
                                     type="email"
+                                    value={email}
+                                    onChange={(event) => setEmail(event.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="username" className={"fg-simodon"}>
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control
+                                    type="text"
                                     value={username}
                                     onChange={(event) => setUsername(event.target.value)}
                                     required

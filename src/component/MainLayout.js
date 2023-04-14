@@ -14,27 +14,22 @@ export function MainLayout() {
         return state.activities.activities
     });
 
+    const user = useSelector((state) => {
+        return state.user.domain
+    });
+
     console.log(activities)
 
     useEffect(() => {
         dispatch(getActivitiesThunk())
     }, [])
 
-    const profile = {
-        name: 'John Doe',
-        profilePicUrl: avatar,
-        following: 100,
-        followers: 500,
-        activities: 200,
-        lastActivity: 'Cycling - 20.5 km',
-    };
-
     return (
         <Container fluid>
             <Row>
                 <Col md={0} lg={0} xl={2} className="sidebar flex-nowrap"/>
                 <Col md={4} lg={3} xl={3} className="sidebar flex-nowrap">
-                    <ProfileCard profile={profile}/>
+                    <ProfileCard profile={user}/>
                     <ActivitySummaryCard/>
                 </Col>
                 <Col md={8} lg={9} xl={5} className="main-content">
