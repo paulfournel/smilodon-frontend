@@ -20,16 +20,20 @@ export const processActivities = async () => {
     return (await request(`${SERVER()}/api/strava/sync`, {method: 'GET'})).data
 }
 
+export const getActivity = async (activityId) => {
+    return (await request(`${SERVER()}/api/messages/${activityId}`, {method: 'GET'})).data
+}
+
 export const addComment = async (activityId, message) => {
     return await request(
-        `${SERVER()}/api/activities/${activityId}/comments`,
-        { method: 'POST', body: JSON.stringify({ message: message }) }
+        `${SERVER()}/api/comments`,
+        {method: 'POST', body: JSON.stringify({parentMessageUrl: activityId, message: message})}
     );
 }
 
 export const patchUser = async (userData) => {
     return request(
         `${SERVER()}/api/users/me`,
-        { method: 'PATCH', body: JSON.stringify(userData) }
+        {method: 'PATCH', body: JSON.stringify(userData)}
     );
 }

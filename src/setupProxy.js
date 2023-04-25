@@ -9,7 +9,14 @@ module.exports = function(app) {
         })
     );
     app.use(
-        '/open-api/users',
+        '/.well-known',
+        createProxyMiddleware({
+            target: 'http://localhost:8080',
+            changeOrigin: true,
+        })
+    );
+    app.use(
+        '/open-api',
         createProxyMiddleware({
             target: 'http://localhost:8080',
             changeOrigin: true,

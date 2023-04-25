@@ -1,6 +1,5 @@
 import React from 'react';
 import './ProfileCard.css';
-import avatar from "../images/avatar.png";
 import {Image} from "react-bootstrap";
 
 export function ProfileCard({profile}) {
@@ -8,7 +7,7 @@ export function ProfileCard({profile}) {
         <div className="card">
 
             <div className="card-body">
-                <Image src={avatar} roundedCircle className="avatar"/>
+                <Image src={'/open-api/profile_picture?user=' + profile.id} roundedCircle className="avatar"/>
                 <h5 className="card-title">{profile.firstName} {profile.lastName}</h5>
                 <div className="card-info">
                     <div className="card-info-item">

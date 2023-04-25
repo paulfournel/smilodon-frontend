@@ -5,8 +5,14 @@ import {faBell, faCog, faSearch, faSignOutAlt, faUser} from "@fortawesome/free-s
 import avatar from "../images/avatar.png";
 import "./Navbar.css";
 import {Link, useNavigate} from "react-router-dom";
+import {SearchBox} from "./SearchBox";
+import {useSelector} from "react-redux";
 
 export function NavbarComponent() {
+
+    const user = useSelector((state) => {
+        return state.user.domain
+    });
 
     const navigate = useNavigate();
 
@@ -24,24 +30,14 @@ export function NavbarComponent() {
                             <FontAwesomeIcon icon={faBell} className="d-md-none d-md-block dropdown-icon"/>
                             Dashboard
                         </Nav.Link>
-                        <Form className="d-none d-sm-block d-flex">
-                            <InputGroup>
-                                <Form.Control
-                                    type="search"
-                                    placeholder="Search athletes"
-                                    className="mr-2"
-                                    aria-label="Search athletes"
-                                />
-                                <InputGroup.Text id="btnGroupAddon"><FontAwesomeIcon icon={faSearch}/></InputGroup.Text>
-                            </InputGroup>
-                        </Form>
+                        <SearchBox placeholder="Search athletes" ariaLabel="Search athletes" />
                     </Nav>
                     <Nav className="ms-auto">
                         <Nav.Link href="#" className="d-none d-sm-block nav-link">
                             <FontAwesomeIcon icon={faBell} className="icon"/>
                         </Nav.Link>
                         <NavDropdown className="d-none d-sm-block"
-                                     title={<Image src={avatar} roundedCircle className="avatar"/>} id="dropdown-menu">
+                                     title={<Image src={'/open-api/profile_picture?user=' + user.id} roundedCircle className="avatar"/>} id="dropdown-menu">
                             <NavDropdown.Item href="#">
                                 <FontAwesomeIcon icon={faUser} className="dropdown-icon"/>
                                 My Profile
