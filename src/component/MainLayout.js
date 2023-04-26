@@ -18,8 +18,6 @@ export function MainLayout() {
         return state.user.domain
     });
 
-    console.log(activities)
-
     useEffect(() => {
         dispatch(getActivitiesThunk())
     }, [])

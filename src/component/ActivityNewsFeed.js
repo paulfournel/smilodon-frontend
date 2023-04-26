@@ -8,22 +8,23 @@ import {formatDuration} from "../utils/timeUtils";
 import {faCommentDots} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {addComment} from "../features/API";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {getActivitiesThunk} from "../features/ActivitiesSlice";
 
-export function ActivityNewsFeed(props) {
-    const navigate = useNavigate();
+export function ActivityNewsFeed({activity}) {
+    const dispatch = useDispatch();
 
     const [showCommentBox, setShowCommentBox] = useState(false);
     const [commentText, setCommentText] = useState("");
-    console.log(props.activity)
-    const attachment = props.activity.attachment ? props.activity.attachment : []
+    const attachment = activity.attachment ? activity.attachment : []
     const handleCommentInputChange = (event) => {
         setCommentText(event.target.value);
     };
 
     const handleCommentSubmit = (event) => {
         event.preventDefault();
-        addComment(props.activity.id, commentText);
+        addComment(activity.id, commentText).then(() => dispatch(getActivitiesThunk()));
         setShowCommentBox(false);
         setCommentText("");
     };
@@ -32,39 +33,35 @@ export function ActivityNewsFeed(props) {
         setShowCommentBox(!showCommentBox);
     };
 
-    const handleActivityClick = (activityId) => {
-        navigate('/activities/' + activityId)
-    }
-
     return (
         <Card className="strava-card">
             <Card.Body>
                 <div className="user-info d-flex">
                     <img
-                        src={props.activity.attributedTo.icon.length > 0 ? props.activity.attributedTo.icon[0] : avatar}
+                        src={activity.attributedTo.icon.length > 0 ? activity.attributedTo.icon[0] : avatar}
                         alt="User icon" className="mr-3"/>
-                    <Card.Title>{props.activity.attributedTo.name}</Card.Title>
+                    <Card.Title>{activity.attributedTo.name}</Card.Title>
                 </div>
                 <hr/>
-                <Link to={`/activities/${props.activity.id}`}>
-                    <Card.Title>{props.activity.summary}</Card.Title>
+                <Link to={`/activities/${activity.id}`}>
+                    <Card.Title>{activity.summary}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted date">
-                        {format(parseISO(props.activity.startDate), 'MM/dd/yyyy HH:mm')}
+                        {format(parseISO(activity.startDate), 'MM/dd/yyyy HH:mm')}
                     </Card.Subtitle>
                 </Link>
                 <br/>
                 <div className="activity-info d-flex justify-content-between">
                     <div className="card-info">
                         <div className="card-info-item">
-                            <span>{Math.ceil(props.activity.distance / 10) / 100} km</span>
+                            <span>{Math.ceil(activity.distance / 10) / 100} km</span>
                             <small>Distance</small>
                         </div>
                         <div className="card-info-item">
-                            <span>{props.activity.totalElevationGain} m</span>
+                            <span>{activity.totalElevationGain} m</span>
                             <small>Elevation Gain</small>
                         </div>
                         <div className="card-info-item">
-                            <span>{formatDuration(props.activity.movingTime)}</span>
+                            <span>{formatDuration(activity.movingTime)}</span>
                             <small>Time</small>
                         </div>
                     </div>
@@ -93,7 +90,7 @@ export function ActivityNewsFeed(props) {
                     </form>
                 )}
                 <div className="comments">
-                    {props.activity.replies.map((comment, index) => (
+                    {activity.replies.map((comment, index) => (
                         <div key={index} className="comment">
                             <strong>{comment.attributedTo.name}:</strong> {comment.summary}
                         </div>

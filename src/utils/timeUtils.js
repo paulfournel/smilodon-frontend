@@ -9,3 +9,13 @@ export const formatDuration = (durationStr) => {
         return `${zeroPad(duration.minutes)}:${zeroPad(duration.seconds)}`
     }
 }
+
+export function getTimeDifference(published) {
+    const diff = (new Date() - new Date(published)) / 1000;
+    if (diff < 3600 * 12) {
+        const minutes = Math.floor(diff / 60);
+        return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+    }
+    const hours = Math.floor(diff / 3600);
+    return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+}

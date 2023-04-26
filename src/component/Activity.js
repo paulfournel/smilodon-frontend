@@ -10,18 +10,22 @@ export function Activity() {
     const {activityId} = useParams();
     const [activity, setActivity] = useState(null);
     console.log(activity)
-    useEffect(() => {
-        async function fetchActivity() {
-            const activityData = await getActivity(activityId);
-            setActivity(activityData);
-        }
 
+    async function fetchActivity() {
+        const activityData = await getActivity(activityId);
+        setActivity(activityData);
+    }
+
+    useEffect(() => {
         fetchActivity();
     }, [activityId])
+
     return (
         <div>
             <NavbarComponent/>
-            {activity ? <ActivityLayout activity={activity.activity} message={activity.message}/> : <p>Loading...</p>}
+            {activity ?
+                <ActivityLayout activity={activity.activity} message={activity.message} callback={fetchActivity}/> :
+                <p>Loading...</p>}
         </div>
     );
 }
