@@ -2,32 +2,17 @@ import React, {useRef, useState} from 'react';
 import {CircleMarker, MapContainer, Polyline, TileLayer} from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 import {ElevationProfile} from './ElevationProfile';
-import {Badge, Card, Col, Container, Image, ListGroup, Modal, Row, Table} from "react-bootstrap";
+import {Card, Col, Container, ListGroup, Row, Table} from "react-bootstrap";
 import {useContainerDimensions} from "../utils/useContainerDimensions";
 import {faCommentDots} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {formatDuration, getTimeDifference} from "../utils/timeUtils";
+import {formatDuration} from "../utils/timeUtils";
 import './ActivityLayout.css'
-import {addComment} from "../features/API";
+import {CommentModal} from "./CommentModal";
 
 export const ActivityLayout = ({activity, message, callback}) => {
 
     const [waypoint, setWaypoint] = useState(null);
-    const [show, setShow] = useState(false); // added show state to manage modal visibility
-    const [commentText, setCommentText] = useState(""); // added newComment state to track input field value
-
-    const handleClose = () => setShow(false); // added handleClose function to close modal
-    const handleShow = () => setShow(true); // added handleShow function to show modal
-
-    const handleCommentInputChange = (event) => {
-        setCommentText(event.target.value);
-    };
-
-    const handleCommentSubmit = (event) => {
-        event.preventDefault();
-        addComment(message.id, commentText).then(() => callback())
-        setCommentText("");
-    };
 
     const componentRef = useRef()
     const {width, height} = useContainerDimensions(componentRef)
@@ -84,10 +69,9 @@ export const ActivityLayout = ({activity, message, callback}) => {
                                             <Col xs={5} style={{textAlign: 'left'}}>
                                                 <div>{activity.user.firstName + ' ' + activity.user.lastName} - {activity.type}</div>
                                             </Col>
-                                            <Col xs={6}/>
-                                            <Col xs={1} className="text-end">
-                                                <FontAwesomeIcon icon={faCommentDots} className="dropdown-icon"
-                                                                 onClick={handleShow}/>
+                                            <Col xs={5}/>
+                                            <Col xs={2} className="text-end">
+                                                <CommentModal message={message} callback={callback}/>
                                             </Col>
                                         </Row>
                                         <hr/>
@@ -213,46 +197,5 @@ export const ActivityLayout = ({activity, message, callback}) => {
 
             </Col>
         </Row>
-        <div>
-            {/* added modal */}
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Comments</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {message.replies
-                        .sort((a, b) => new Date(a.published) - new Date(b.published))
-                        .map((comment, index) => (
-                            <Card key={index} className="my-3">
-                                <Card.Body className="d-flex align-items-center">
-                                    <Image src={comment.attributedTo.icon[0]} roundedCircle className="mr-3" width={50} height={50} style={{marginRight: '10px'}}/>
-                                    <div className="flex-grow-1">
-                                        <div className="d-flex justify-content-between">
-                                            <div style={{fontWeight:'bold'}}>{comment.attributedTo.name}</div>
-                                            <Badge bg="secondary" className="ml-auto">
-                                                {getTimeDifference(comment.published)}
-                                            </Badge>
-                                        </div>
-                                        <div className="comment-text">{comment.summary}</div>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                        ))}
-                    <form onSubmit={handleCommentSubmit}>
-                        <div className="form-group">
-                            <textarea
-                                className="form-control"
-                                placeholder="Add a comment"
-                                value={commentText}
-                                onChange={handleCommentInputChange}
-                            ></textarea>
-                        </div>
-                        <button type="submit" className="btn btn-primary">
-                            Submit
-                        </button>
-                    </form>
-                </Modal.Body>
-            </Modal>
-        </div>
     </Container>)
 }

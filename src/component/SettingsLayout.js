@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Button, Card, Col, Container, Form, Image, Row} from "react-bootstrap";
-import {patchUser, processActivities} from "../features/API";
+import {deleteStrava, patchUser, processActivities} from "../features/API";
 import {useDispatch, useSelector} from "react-redux";
 import {getDomainUserThunk} from "../features/UsersSlice";
 import './SettingsLayout.css'
@@ -43,6 +43,10 @@ export function SettingsLayout() {
         window.location.href = "/api/connect_other_account";
     };
 
+    const revokeStravaAccess = () => {
+        deleteStrava().then(() => dispatch(getDomainUserThunk()))
+    }
+
     const handleClickProcessActivities = () => {
         processActivities();
     };
@@ -52,44 +56,6 @@ export function SettingsLayout() {
             <Row>
                 <Col md={0} lg={0} xl={2} className="sidebar flex-nowrap"/>
                 <Col md={12} lg={12} xl={8} className="main-content">
-                    <Card className="mb-3">
-                        <Card.Body>
-                            <Card.Title>My Apps</Card.Title>
-
-                            {user.strava ? (<>
-                                    <div>Strava profile</div>
-                                    <div className="card-info">
-                                        <div className="card-info-item">
-                                            <Image src={user.strava.profileMedium} roundedCircle/>
-                                        </div>
-                                        <div className="card-info-item">
-                                            <span>{user.strava.id}</span>
-                                            <small>ID</small>
-                                        </div>
-                                        <div className="card-info-item">
-                                            <span>{user.strava.firstname}</span>
-                                            <small>First Name</small>
-                                        </div>
-                                        <div className="card-info-item">
-                                            <span>{user.strava.lastname}</span>
-                                            <small>Last Name</small>
-                                        </div>
-                                    </div>
-                                    <Button className="mt-3" onClick={handleClickProcessActivities}>
-                                        Process Activities
-                                    </Button>
-                                    <Button className="mt-3" variant={"warning"} onClick={handleClickProcessActivities}>
-                                        Revoke Access
-                                    </Button>
-                                </>
-                            ) : (
-                                <Button className="mr-3" onClick={handleClick}>
-                                    Link Strava Profile
-                                </Button>
-                            )}
-
-                        </Card.Body>
-                    </Card>
                     <Card className="mb-3">
                         <Card.Body>
                             <Card.Title>Edit Profile</Card.Title>
@@ -133,8 +99,57 @@ export function SettingsLayout() {
                                         />
                                     </Col>
                                 </Form.Group>
-                                <Button type="submit">Update</Button>
+                                <Row style={{marginTop: '20px'}}>
+                                    <Col xs={3}/>
+                                    <Col xs={6}><Button type="submit" style={{width: '90%'}}>Update</Button></Col>
+                                    <Col xs={3}/>
+
+                                </Row>
                             </Form>
+                        </Card.Body>
+                    </Card>
+                    <Card className="mb-3">
+                        <Card.Body>
+                            <Card.Title>My Apps</Card.Title>
+
+                            {user.strava ? (<>
+                                    <div>Strava profile</div>
+                                    <div className="card-info">
+                                        <div className="card-info-item">
+                                            <Image src={user.strava.profileMedium} roundedCircle/>
+                                        </div>
+                                        <div className="card-info-item">
+                                            <span>{user.strava.id}</span>
+                                            <small>ID</small>
+                                        </div>
+                                        <div className="card-info-item">
+                                            <span>{user.strava.firstname}</span>
+                                            <small>First Name</small>
+                                        </div>
+                                        <div className="card-info-item">
+                                            <span>{user.strava.lastname}</span>
+                                            <small>Last Name</small>
+                                        </div>
+                                    </div>
+                                    <Row>
+                                        <Col xs={6}>
+                                            <Button className="mt-3" onClick={handleClickProcessActivities} style={{width: '90%'}}>
+                                                Process Activities
+                                            </Button>
+                                        </Col>
+                                        <Col xs={6}>
+                                            <Button className="mt-3" variant={"warning"} onClick={revokeStravaAccess} style={{width: '90%'}}>
+                                                Revoke Access
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </>
+                            ) : (
+                                <Button className="mr-3" onClick={handleClick}>
+                                    Link Strava Profile
+                                </Button>
+                            )}
+
                         </Card.Body>
                     </Card>
                 </Col>

@@ -37,3 +37,10 @@ export const patchUser = async (userData) => {
         {method: 'PATCH', body: JSON.stringify(userData)}
     );
 }
+
+export const deleteStrava = async () => {
+    return request(
+        `${SERVER()}/api/users/me/apps/strava`,
+        {method: 'DELETE'}
+    );
+}

@@ -1,37 +1,20 @@
-import React, {useState} from "react";
+import React from "react";
 import "./ActivityNewsFeed.css";
 import Card from "react-bootstrap/Card";
 import {Image} from "react-bootstrap";
 import {format, parseISO} from "date-fns";
 import avatar from "../images/avatar.png";
 import {formatDuration} from "../utils/timeUtils";
-import {faCommentDots} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {addComment} from "../features/API";
 import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {getActivitiesThunk} from "../features/ActivitiesSlice";
+import {CommentModal} from "./CommentModal";
 
 export function ActivityNewsFeed({activity}) {
     const dispatch = useDispatch();
-
-    const [showCommentBox, setShowCommentBox] = useState(false);
-    const [commentText, setCommentText] = useState("");
     const attachment = activity.attachment ? activity.attachment : []
-    const handleCommentInputChange = (event) => {
-        setCommentText(event.target.value);
-    };
 
-    const handleCommentSubmit = (event) => {
-        event.preventDefault();
-        addComment(activity.id, commentText).then(() => dispatch(getActivitiesThunk()));
-        setShowCommentBox(false);
-        setCommentText("");
-    };
-
-    const handleCommentIconClick = () => {
-        setShowCommentBox(!showCommentBox);
-    };
+    const fetchActivities = () => dispatch(getActivitiesThunk())
 
     return (
         <Card className="strava-card">
@@ -70,34 +53,14 @@ export function ActivityNewsFeed({activity}) {
                             <Image src={img.url} fluid={true} alt="Map"/>
                         ))}
                     </div>
-                    <div className="comment-icon" onClick={handleCommentIconClick}>
-                        <FontAwesomeIcon icon={faCommentDots} className="dropdown-icon"/>
+                    <div className="comment-icon">
+                        <CommentModal message={activity} callback={fetchActivities}/>
                     </div>
-                </div>
-                {showCommentBox && (
-                    <form onSubmit={handleCommentSubmit}>
-                        <div className="form-group">
-                            <textarea
-                                className="form-control"
-                                placeholder="Add a comment"
-                                value={commentText}
-                                onChange={handleCommentInputChange}
-                            ></textarea>
-                        </div>
-                        <button type="submit" className="btn btn-primary">
-                            Submit
-                        </button>
-                    </form>
-                )}
-                <div className="comments">
-                    {activity.replies.map((comment, index) => (
-                        <div key={index} className="comment">
-                            <strong>{comment.attributedTo.name}:</strong> {comment.summary}
-                        </div>
-                    ))}
                 </div>
 
             </Card.Body>
+
+
         </Card>
     );
 }
