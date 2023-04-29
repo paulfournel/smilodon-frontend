@@ -25,12 +25,11 @@ export function NavbarComponent() {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="mr-auto">
+                    <Nav className="mr-auto" style={{marginTop: '15px'}} >
                         <Nav.Link href="#" className="nav-link">
-                            <FontAwesomeIcon icon={faBell} className="d-md-none d-md-block dropdown-icon"/>
                             Dashboard
                         </Nav.Link>
-                        <SearchBox placeholder="Search athletes" ariaLabel="Search athletes" />
+                        <SearchBox placeholder="Search athletes" />
                     </Nav>
                     <Nav className="ms-auto">
                         <Nav.Link href="#" className="d-none d-sm-block nav-link">
