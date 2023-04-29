@@ -58,4 +58,5 @@ deploy:
     - kubectl config get-contexts
     - kubectl config use-context smilodon-social/frontend:k8s
     - cat deployment.yaml | envsubst | tee deployment-tmp.yaml
+    - cat deployment-tmp.yaml
     - kubectl apply -f deployment-tmp.yaml
