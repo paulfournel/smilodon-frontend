@@ -10,7 +10,7 @@ export const getDomainUserThunk = createAsyncThunk(
 
 const UsersSlice = createSlice({
     name: 'users',
-    initialState: {current: null, domain: null, loading: 'idle'},
+    initialState: {domain: null, loading: 'idle'},
     reducers: {},
     extraReducers: {
         [getDomainUserThunk.pending]: (state, action) => {
@@ -23,6 +23,7 @@ const UsersSlice = createSlice({
         // Add reducers for additional action types here, and handle loading state as needed
         [getDomainUserThunk.fulfilled]: (state, action) => {
             // Add user to the state array
+            state.status = 'done'
             state.domain = action.payload
         }
     }

@@ -1,12 +1,12 @@
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import {useSelector} from "react-redux";
+import {useSelector} from 'react-redux';
+import {Navigate, Outlet} from 'react-router-dom';
 
 export const PrivateRoute = () => {
-    let user = useSelector((state) => state.user.domain);
-    console.log("private route")
-    console.log(user)
-    // If authorized, return an outlet that will render child elements
-    // If not, return element that will navigate to login page
-    return user ? <Outlet /> : <Navigate to="/login" />;
-}
+    const user = useSelector((state) => state.user);
+
+    if (user.status === 'loading' || user.status === 'idle') {
+        return <div>Loading...</div>;
+    }
+
+    return user ? <Outlet/> : <Navigate to="/login"/>;
+};
