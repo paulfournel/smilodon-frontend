@@ -8,5 +8,5 @@ export const PrivateRoute = () => {
         return <div>Loading...</div>;
     }
 
-    return user ? <Outlet/> : <Navigate to="/login"/>;
+    return user.domain ? <Outlet/> : <Navigate to="/login"/>;
 };
