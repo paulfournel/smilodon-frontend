@@ -1,3 +1,0 @@
-gitops:
-  manifest_projects:
-  - id: "smilodon-social/frontend/k8s-frontend"
